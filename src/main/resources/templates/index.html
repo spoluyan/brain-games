@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<title>Quiz Game &ndash; Вход</title>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/styles.css" />
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<form th:action="@{/}" method="post" class="form-signin">
+			<h2 class="form-signin-heading">Вход</h2>
+			<p th:if="${param.error}" class="text-danger">Неверный логин или пароль.</p>
+			<label for="username" class="sr-only">Имя пользователя</label>
+			<input type="text" id="username" name="username" class="form-control" placeholder="Имя пользователя" required="required" autofocus="autofocus" />
+			<label for="password" class="sr-only">Пароль</label>
+        	<input type="password" id="password" name="password" class="form-control" placeholder="Пароль" required="required" />
+        	<button class="btn btn-lg btn-primary btn-block" type="submit">Войти в игру</button>
+        	<a class="btn btn-lg btn-default btn-block" href="registration.html" th:href="@{/register}" role="button">Зарегистрироваться</a>
+		</form>
+	</div>
+</body>
+</html>
