@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pw.spn.quizgame.exception.DuplicateUserException;
-import pw.spn.quizgame.security.Authority;
+import pw.spn.quizgame.security.DefaultAuthority;
 import pw.spn.quizgame.service.PlayerService;
 
 @Controller
@@ -40,7 +40,7 @@ public class RegistrationController extends BaseController {
 
     private void authenticate(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password,
-                Collections.singleton(new Authority("user")));
+                Collections.singleton(new DefaultAuthority()));
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
