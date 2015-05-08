@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = QuizgameApplication.class)
 @WebAppConfiguration
 public class QuizgameApplicationTests {
-
+    // TODO write tests
     @Test
     public void contextLoads() {
     }
