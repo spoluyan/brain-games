@@ -75,7 +75,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void startGame(String competitorId, String competitorName) {
         // check if competitor has already started the game
-        GameState gameState = gameStateRepository.findByPlayerIdAndCompetitorId(getCurrentPlayerId(), competitorId);
+        GameState gameState = gameStateRepository.findByPlayerIdAndCompetitorIdAndCompletedFalse(getCurrentPlayerId(), competitorId);
         if (gameState != null) {
             return;
         }

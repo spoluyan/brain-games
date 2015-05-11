@@ -9,7 +9,7 @@ import pw.spn.quizgame.domain.GameState;
 public interface GameStateRepository extends MongoRepository<GameState, String> {
     List<GameState> findByPlayerIdAndCompletedFalse(String playerId);
 
-    GameState findByPlayerIdAndCompetitorId(String playerId, String competitorId);
+    GameState findByPlayerIdAndCompetitorIdAndCompletedFalse(String playerId, String competitorId);
 
     GameState findByPlayerIdAndIsPlayingNowTrue(String playerId);
 }

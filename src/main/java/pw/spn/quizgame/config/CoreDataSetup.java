@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 import pw.spn.quizgame.domain.Player;
 import pw.spn.quizgame.domain.Question;
 import pw.spn.quizgame.domain.RightAnswer;
+import pw.spn.quizgame.domain.Statistics;
 import pw.spn.quizgame.domain.Topic;
 import pw.spn.quizgame.repository.GameStateRepository;
 import pw.spn.quizgame.repository.PlayerRepository;
 import pw.spn.quizgame.repository.QuestionRepository;
 import pw.spn.quizgame.repository.RightAnswerRepository;
+import pw.spn.quizgame.repository.StatisticsRepository;
 import pw.spn.quizgame.repository.TopicRepository;
 import pw.spn.quizgame.util.CryptoUtil;
 
@@ -35,6 +37,9 @@ public final class CoreDataSetup {
     @Autowired
     private RightAnswerRepository rightAnswerRepository;
 
+    @Autowired
+    private StatisticsRepository statisticsRepository;
+
     @PostConstruct
     public void init() {
         createPlayers();
@@ -42,6 +47,20 @@ public final class CoreDataSetup {
         createTopicsAndQuestions();
 
         createGameStates();
+
+        createStatistics();
+    }
+
+    private void createStatistics() {
+        statisticsRepository.deleteAll();
+
+        Statistics stat = new Statistics();
+        stat.setPlayerId(playerRepository.findByLoginIgnoreCase("ninja").getId());
+        stat.setRatePoints(10);
+        stat.setTotalGames(1);
+        stat.setWins(1);
+        stat.setPlace(1);
+        statisticsRepository.save(stat);
     }
 
     private void createTopicsAndQuestions() {

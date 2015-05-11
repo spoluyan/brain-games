@@ -22,6 +22,9 @@ import pw.spn.quizgame.util.RandomUtil;
 @Service
 public class GameServiceImpl implements GameService {
     @Autowired
+    private StatisticsService statisticsService;
+
+    @Autowired
     private GameStateRepository gameStateRepository;
 
     @Autowired
@@ -108,7 +111,7 @@ public class GameServiceImpl implements GameService {
             gameState.setYourTurn(stillPlayersTurn);
 
             // update competitor game state
-            GameState competitorGameState = gameStateRepository.findByPlayerIdAndCompetitorId(
+            GameState competitorGameState = gameStateRepository.findByPlayerIdAndCompetitorIdAndCompletedFalse(
                     gameState.getCompetitorId(), gameState.getPlayerId());
             competitorGameState.setYourTurn(!stillPlayersTurn);
             PlayedRound competitorRound = competitorGameState.getLastPlayedRound(round.getTopic().getId());
@@ -137,6 +140,8 @@ public class GameServiceImpl implements GameService {
                     gameState.setGameResult(GameResult.LOOSE);
                     competitorGameState.setGameResult(GameResult.WIN);
                 }
+                statisticsService.updateStatistics(gameState);
+                statisticsService.updateStatistics(competitorGameState);
             }
 
             gameStateRepository.save(competitorGameState);

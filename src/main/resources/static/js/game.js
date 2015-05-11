@@ -54,7 +54,7 @@ function showEndGameNotifications(gameStatesLength) {
 	var msg = '';
 	for (var i = 0; i < gameStatesLength; i++) {
 		if (gameStates[i].gameResult !== 'NO_RESULT') {
-			msg += '<p class="text->';
+			msg += '<p class="text-';
 			if (gameStates[i].gameResult === 'WIN') {
 				msg += 'success">';
 				msg += winMsg;
@@ -235,7 +235,21 @@ function nextQuestion() {
 }
 
 function showStatistics() {
-	//TODO
+	showLoader();
+	showState(statisticsState);
+	
+	$.ajax('/stat').success(function(statistics) {
+		var totalGames = statistics.totalGames;
+		var onePercent = totalGames / 100;
+		$('#s-place').text(statistics.place);
+		$('#s-rate').text(statistics.ratePoints);
+		$('#s-games').text(totalGames);
+		$('#s-wins').text(statistics.wins + ' (' + (statistics.wins / onePercent) + '%)');
+		$('#s-draws').text(statistics.draws + ' (' + (statistics.draws / onePercent) + '%)');
+		$('#s-looses').text(statistics.looses + ' (' + (statistics.looses / onePercent) + '%)');
+		$('#s-flawless').text(statistics.flawlessVictories);
+		showState(statisticsState);
+	});
 }
 
 function newGame() {

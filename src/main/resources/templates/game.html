@@ -160,7 +160,42 @@
 			<button id="next" type="button" class="btn btn-block btn-lg btn-primary" onclick="nextQuestion()">Дальше</button>
 		</div>
 		
-		<div id="statistics-state" class="hide">Statistics state</div>
+		<div id="statistics-state" class="hide">
+			<div class="page-header">
+				<h1>Статистика</h1>
+			</div>
+			<table class="table table-striped stat">
+				<tr>
+					<td>Место в таблице игроков</td>
+					<td id="s-place"></td>
+				</tr>
+				<tr>
+					<td>Очки рейтинга</td>
+					<td id="s-rate"></td>
+				</tr>
+				<tr>
+					<td>Всего игр</td>
+					<td id="s-games"></td>
+				</tr>
+				<tr>
+					<td>Побед</td>
+					<td id="s-wins"></td>
+				</tr>
+				<tr>
+					<td>Ничьих</td>
+					<td id="s-draws"></td>
+				</tr>
+				<tr>
+					<td>Поражений</td>
+					<td id="s-looses"></td>
+				</tr>
+				<tr>
+					<td>Игры без ошибок</td>
+					<td id="s-flawless"></td>
+				</tr>
+			</table>
+			<button type="button" class="btn btn-block btn-lg btn-default" onclick="createGame()">Назад</button>
+		</div>
 	</div>
 </body>
 </html>

@@ -20,7 +20,7 @@ import pw.spn.quizgame.service.PlayerService;
 
 @Controller
 @RequestMapping("/game")
-public class GameController extends BaseController {
+public class GameController {
     @Autowired
     private PlayerService playerService;
 

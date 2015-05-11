@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO logout
-        http.authorizeRequests().antMatchers("/game/**").authenticated().and().authorizeRequests()
+        http.authorizeRequests().antMatchers("/game/**", "/stat").authenticated().and().authorizeRequests()
                 .antMatchers("/register", "/addUser").permitAll().and().formLogin().defaultSuccessUrl("/game/", true)
                 .loginPage("/").permitAll().and().logout().logoutSuccessUrl("/").permitAll();
     }

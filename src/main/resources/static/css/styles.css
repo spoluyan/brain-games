@@ -22,3 +22,7 @@ table.borderless td {
 .answer {
 	width: 300px;
 }
+
+table.stat td {
+	text-align: left;
+}
