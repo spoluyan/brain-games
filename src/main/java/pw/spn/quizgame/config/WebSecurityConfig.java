@@ -10,6 +10,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import pw.spn.quizgame.security.UserAuthenticationProvider;
 
@@ -20,10 +21,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // TODO logout
         http.authorizeRequests().antMatchers("/game/**", "/stat").authenticated().and().authorizeRequests()
                 .antMatchers("/register", "/addUser").permitAll().and().formLogin().defaultSuccessUrl("/game/", true)
-                .loginPage("/").permitAll().and().logout().logoutSuccessUrl("/").permitAll();
+                .loginPage("/").permitAll().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/").permitAll();
     }
 
     @Override
