@@ -22,7 +22,7 @@ import pw.spn.quizgame.util.RandomUtil;
 
 @Service
 public class GameServiceImpl implements GameService {
-    private static final long TIME_OUT = TimeUnit.SECONDS.toMillis(30);
+    private static final long TIME_OUT = TimeUnit.SECONDS.toMillis(20);
 
     @Autowired
     private StatisticsService statisticsService;

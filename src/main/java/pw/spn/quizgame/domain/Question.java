@@ -8,6 +8,7 @@ public class Question {
 
     private String topicId;
     private String question;
+    // TODO add image support
     private byte[] image;
     private String[] answers;
     private long timeLeft;

@@ -20,6 +20,7 @@ var countMsg = ' со счетом ';
 var countDrawMsg = '. Счет ';
 
 var pingInterval = 5000;
+var timeOut = 20000;
 
 var timeOutIntervalID;
 
@@ -230,12 +231,14 @@ function updateProgressBar() {
 }
 
 function updateTimeLeft(timeLeft) {
+	$('.alert').addClass('hide');
 	var $progress = $('.progress-bar');
 	if (timeLeft < 0) {
 		timeLeft = 0;
 		clearInterval(timeOutIntervalID);
+		$('.alert').removeClass('hide');
 	}
-	var percents = (timeLeft / 300) | 0;
+	var percents = (timeLeft * 100 / timeOut) | 0;
 	$progress.attr('style', 'width: ' + percents + '%');
 	$progress.attr('aria-valuenow', timeLeft);
 }
@@ -253,8 +256,9 @@ function answer(answerIndex) {
 		if (rightAnswer != answerIndex) {
 			$('#answer' + answerIndex).removeClass('btn-default');
 			$('#answer' + answerIndex).addClass('btn-danger');
+		} else {
+			$('#answer' + rightAnswer).addClass('btn-success');
 		}
-		$('#answer' + rightAnswer).addClass('btn-success');
 	});
 	
 	$('#next').show();
