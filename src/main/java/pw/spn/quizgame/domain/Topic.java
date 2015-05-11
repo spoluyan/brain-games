@@ -30,4 +30,18 @@ public class Topic {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Topic)) {
+            return false;
+        }
+        Topic topic = (Topic) obj;
+        return this.name.equals(topic.name);
+    }
 }

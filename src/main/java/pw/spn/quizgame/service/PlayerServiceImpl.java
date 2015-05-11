@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +41,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<GameState> getPlayerGameStates() {
-        List<GameState> states = gameStateRepository.findByPlayerId(getCurrentPlayerId());
+        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedTrue(getCurrentPlayerId());
         if (states.size() == 0) {
             GameState state = new GameState();
             state.setPlayerId(getCurrentPlayerId());
@@ -54,22 +53,20 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public GameState getCurrentGameState() {
-        return gameStateRepository.findByPlayerIdAndIsPlayingNow(getCurrentPlayerId(), true);
+        return gameStateRepository.findByPlayerIdAndIsPlayingNowTrue(getCurrentPlayerId());
     }
 
     @Override
     public Map<String, String> getAvailablePlayers() {
-        List<GameState> states = gameStateRepository.findByPlayerId(getCurrentPlayerId());
+        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedTrue(getCurrentPlayerId());
         Set<String> exclusions = new HashSet<>(states.size() + 1);
         exclusions.add(getCurrentPlayerId());
         states.forEach(state -> {
             exclusions.add(state.getCompetitorId());
         });
-        List<Player> allPlayers = playerRepository.findAll();
-        List<Player> available = allPlayers.stream().filter(player -> !exclusions.contains(player.getId()))
-                .collect(Collectors.toList());
-        Map<String, String> result = new HashMap<>(available.size());
-        available.forEach(player -> {
+        List<Player> availablePlayers = playerRepository.findByPlayerIdNotIn(exclusions);
+        Map<String, String> result = new HashMap<>(availablePlayers.size());
+        availablePlayers.forEach(player -> {
             result.put(player.getId(), player.getLogin());
         });
         return result;

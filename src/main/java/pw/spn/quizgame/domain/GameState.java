@@ -22,6 +22,7 @@ public class GameState {
     private int competitorPoints;
     private List<PlayedRound> playedRounds = new ArrayList<>(6);
     private GameResult gameResult = GameResult.NO_RESULT;
+    private boolean completed;
 
     @JsonIgnore
     public PlayedRound getLastPlayedRound() {
@@ -127,5 +128,13 @@ public class GameState {
 
     public void setGameResult(GameResult gameResult) {
         this.gameResult = gameResult;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

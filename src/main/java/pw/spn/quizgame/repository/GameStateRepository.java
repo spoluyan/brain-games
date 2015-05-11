@@ -7,9 +7,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import pw.spn.quizgame.domain.GameState;
 
 public interface GameStateRepository extends MongoRepository<GameState, String> {
-    List<GameState> findByPlayerId(String playerId);
+    List<GameState> findByPlayerIdAndCompletedTrue(String playerId);
 
     GameState findByPlayerIdAndCompetitorId(String playerId, String competitorId);
 
-    GameState findByPlayerIdAndIsPlayingNow(String playerId, boolean isPlayingNow);
+    GameState findByPlayerIdAndIsPlayingNowTrue(String playerId);
 }

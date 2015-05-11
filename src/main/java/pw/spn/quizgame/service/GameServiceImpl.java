@@ -1,7 +1,9 @@
 package pw.spn.quizgame.service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import pw.spn.quizgame.repository.GameStateRepository;
 import pw.spn.quizgame.repository.QuestionRepository;
 import pw.spn.quizgame.repository.RightAnswerRepository;
 import pw.spn.quizgame.repository.TopicRepository;
+import pw.spn.quizgame.util.RandomUtil;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -36,8 +39,12 @@ public class GameServiceImpl implements GameService {
         PlayedRound round = gameState.getLastPlayedRound();
 
         if (round == null || round.getAnswers() != null) {
-            // TODO return 3 topics that were not played
-            return topicRepository.findAll();
+            Set<String> playedTopicsIDs = new HashSet<>();
+            gameState.getPlayedRounds().forEach(r -> {
+                playedTopicsIDs.add(r.getTopic().getId());
+            });
+            List<Topic> allTopics = topicRepository.findByIdNotIn(playedTopicsIDs);
+            return RandomUtil.getRandomItemsFromList(allTopics, 3);
         }
 
         return Collections.singletonList(round.getTopic());
@@ -57,8 +64,12 @@ public class GameServiceImpl implements GameService {
             gameState.getPlayedRounds().add(round);
         }
         if (round.getQuestions().size() <= round.getQuestionsCounter()) {
-            // TODO get random questions
-            q = questionRepository.findByTopicId(topicId).get(0);
+            Set<String> playedQustionsIDs = new HashSet<>();
+            round.getQuestions().forEach(question -> {
+                playedQustionsIDs.add(question.getId());
+            });
+            List<Question> questions = questionRepository.findByTopicIdAndIdNotIn(topicId, playedQustionsIDs);
+            q = RandomUtil.getRandomItemFromList(questions);
             round.getQuestions().add(q);
         } else {
             q = round.getCurrentQuestion();
