@@ -4,16 +4,155 @@
 <head>
 <title>Quiz Game &ndash; Игра</title>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="css/styles.css" />
+	<link rel="stylesheet" href="/css/styles.css" />
+	<link rel="stylesheet" href="/css/loader.css" />
 	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/0.3.4/sockjs.min.js"></script>
 	
-	<script src="js/application.js"></script>
+	<script src="/js/game.js"></script>
 </head>
 <body>
-
+	<div id="loader">
+		<div id="floatingCirclesG">
+			<div class="f_circleG" id="frotateG_01"></div>
+			<div class="f_circleG" id="frotateG_02"></div>
+			<div class="f_circleG" id="frotateG_03"></div>
+			<div class="f_circleG" id="frotateG_04"></div>
+			<div class="f_circleG" id="frotateG_05"></div>
+			<div class="f_circleG" id="frotateG_06"></div>
+			<div class="f_circleG" id="frotateG_07"></div>
+			<div class="f_circleG" id="frotateG_08"></div>
+		</div>
+	</div>
+	
+	<div class="container" id="content">
+		<div id="no-state" class="hide">
+			<div class="page-header">
+				<h1 id="player-name"></h1>
+			</div>
+			<button type="button" class="btn btn-block btn-lg btn-success" onclick="newGame()">Новая игра</button>
+			<br />
+			<p id="players"></p>
+			<br />
+			<button type="button" class="btn btn-block btn-lg btn-default" onclick="showStatistics()">Статистика</button>
+		</div>
+		
+		<div id="choose-player-state" class="hide">
+			<div class="page-header">
+				<h1>Выберите соперника</h1>
+			</div>
+			<p id="competitors"></p>
+			<br />
+			<button type="button" class="btn btn-block btn-lg btn-default" onclick="createGame()">Отмена</button>
+		</div>
+		
+		<div id="view-results-state" class="hide">
+			<div class="page-header">
+				<h1 id="vs-names"></h1>
+			</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th id="player-name-header"></th>
+						<th id="scores"></th>
+						<th id="competitor-name-header"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td>Раунд 1</td>
+						<td></td>
+					</tr>
+					<tr id="round-1">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Раунд 2</td>
+						<td></td>
+					</tr>
+					<tr id="round-2">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Раунд 3</td>
+						<td></td>
+					</tr>
+					<tr id="round-3">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Раунд 4</td>
+						<td></td>
+					</tr>
+					<tr id="round-4">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Раунд 5</td>
+						<td></td>
+					</tr>
+					<tr id="round-5">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>Раунд 6</td>
+						<td></td>
+					</tr>
+					<tr id="round-6">
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<button type="button" class="btn btn-block btn-lg btn-success" onclick="makeTurn()">Играть</button>
+		</div>
+		
+		<div id="choose-topic-state" class="hide">
+			<div class="page-header">
+				<h1>Выберите категорию</h1>
+			</div>
+			<p id="topics"></p>
+		</div>
+		
+		<div id="question-state" class="hide">
+			<div class="page-header">
+				<h1 id="current-topic"></h1>
+			</div>
+			<p id="question" class="lead"></p>
+			<table class='table borderless'>
+				<tr>
+					<td><button id="answer0" type="button" class="btn btn-default btn-lg answer" onclick="answer(0)"></button></td>
+					<td><button id="answer1" type="button" class="btn btn-default btn-lg answer" onclick="answer(1)"></button></td>
+				</tr>
+				<tr>
+					<td><button id="answer2" type="button" class="btn btn-default btn-lg answer" onclick="answer(2)"></button></td>
+					<td><button id="answer3" type="button" class="btn btn-default btn-lg answer" onclick="answer(3)"></button></td>
+				</tr>
+			</table>
+			<button id="next" type="button" class="btn btn-block btn-lg btn-primary" onclick="nextQuestion()">Дальше</button>
+		</div>
+		
+		<div id="statistics-state" class="hide">Statistics state</div>
+	</div>
 </body>
 </html>

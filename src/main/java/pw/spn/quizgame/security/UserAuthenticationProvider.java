@@ -1,7 +1,5 @@
 package pw.spn.quizgame.security;
 
-import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +24,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         if (player != null) {
             String encryptedPassword = CryptoUtil.encryptWithMD5(password);
             if (player.getPassword().equals(encryptedPassword)) {
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(login, password,
-                        Collections.singleton(new DefaultAuthority()));
-                return token;
+                Authentication auth = SecurityUtil.createAuthentication(player.getId(), login, password);
+                return auth;
             }
         }
         return null;
