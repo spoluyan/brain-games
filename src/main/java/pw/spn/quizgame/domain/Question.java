@@ -10,6 +10,7 @@ public class Question {
     private String question;
     private byte[] image;
     private String[] answers;
+    private long timeLeft;
 
     public Question() {
     }
@@ -65,5 +66,13 @@ public class Question {
 
     public void setAnswers(String[] answers) {
         this.answers = answers;
+    }
+
+    public long getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(long timeLeft) {
+        this.timeLeft = timeLeft;
     }
 }

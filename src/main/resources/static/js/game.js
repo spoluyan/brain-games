@@ -21,6 +21,8 @@ var countDrawMsg = '. Счет ';
 
 var pingInterval = 5000;
 
+var timeOutIntervalID;
+
 $(document).ready(function() {
 	$loader = $('#loader');
 	$content= $('#content');
@@ -211,9 +213,31 @@ function chooseTopic(topicId) {
 			$('button[id^="answer"]').removeClass('btn-success');
 			$('button[id^="answer"]').addClass('btn-default');
 			
+			var timeLeft = question.timeLeft;
+			updateTimeLeft(timeLeft);
+			
+			timeOutIntervalID = setInterval(updateProgressBar, 300);
+			
 			showState(questionState);
 		});
 	});
+}
+
+function updateProgressBar() {
+	var $progress = $('.progress-bar');
+	var timeLeft = parseInt($progress.attr('aria-valuenow')) - 300;
+	updateTimeLeft(timeLeft);
+}
+
+function updateTimeLeft(timeLeft) {
+	var $progress = $('.progress-bar');
+	if (timeLeft < 0) {
+		timeLeft = 0;
+		clearInterval(timeOutIntervalID);
+	}
+	var percents = (timeLeft / 300) | 0;
+	$progress.attr('style', 'width: ' + percents + '%');
+	$progress.attr('aria-valuenow', timeLeft);
 }
 
 function getPlayingRound(state) {
@@ -221,6 +245,7 @@ function getPlayingRound(state) {
 }
 
 function answer(answerIndex) {
+	clearInterval(timeOutIntervalID);
 	$('button[id^="answer"]').addClass('disabled');
 	
 	$.ajax('/game/turn/' + currentPlayingGameState.id + '/' + answerIndex).success(function(rightAnswer) {

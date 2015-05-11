@@ -11,6 +11,7 @@ public class PlayedRound {
     private boolean[] competitorAnswers;
     private int questionsCounter;
     private List<Question> questions = new ArrayList<>(3);
+    private long questionTime;
 
     public void incrementQuestionsCounter() {
         questionsCounter++;
@@ -59,5 +60,13 @@ public class PlayedRound {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public long getQuestionTime() {
+        return questionTime;
+    }
+
+    public void setQuestionTime(long questionTime) {
+        this.questionTime = questionTime;
     }
 }

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import pw.spn.quizgame.util.RandomUtil;
 
 @Service
 public class GameServiceImpl implements GameService {
+    private static final long TIME_OUT = TimeUnit.SECONDS.toMillis(30);
+
     @Autowired
     private StatisticsService statisticsService;
 
@@ -79,6 +82,13 @@ public class GameServiceImpl implements GameService {
             q = round.getCurrentQuestion();
         }
 
+        long questionTime = round.getQuestionTime();
+        if (questionTime != 0) {
+            q.setTimeLeft(TIME_OUT - (System.currentTimeMillis() - questionTime));
+        } else {
+            round.setQuestionTime(System.currentTimeMillis());
+            q.setTimeLeft(TIME_OUT);
+        }
         gameStateRepository.save(gameState);
         return q;
     }
@@ -87,13 +97,16 @@ public class GameServiceImpl implements GameService {
     public int answer(String gameStateId, int answer) {
         GameState gameState = getGameStateById(gameStateId);
         PlayedRound round = gameState.getLastPlayedRound();
+
+        boolean timeOut = wasTimeOut(round);
+
         int rightAnswer = rightAnswerRepository.findByQuestionId(round.getCurrentQuestion().getId()).getAnswerIndex();
 
         boolean[] answers = round.getAnswers();
         if (answers == null) {
             answers = new boolean[3];
         }
-        answers[round.getQuestionsCounter()] = (answer == rightAnswer);
+        answers[round.getQuestionsCounter()] = (!timeOut && answer == rightAnswer);
         round.incrementQuestionsCounter();
         round.setAnswers(answers);
 
@@ -147,9 +160,13 @@ public class GameServiceImpl implements GameService {
             gameStateRepository.save(competitorGameState);
         }
 
+        round.setQuestionTime(0);
         gameStateRepository.save(gameState);
-
         return rightAnswer;
+    }
+
+    private boolean wasTimeOut(PlayedRound round) {
+        return round.getQuestionTime() + TIME_OUT > System.currentTimeMillis();
     }
 
     @Override
