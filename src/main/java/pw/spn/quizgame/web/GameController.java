@@ -73,4 +73,10 @@ public class GameController extends BaseController {
     public int answer(@PathVariable String gameStateId, @PathVariable int answer) {
         return gameService.answer(gameStateId, answer);
     }
+
+    @RequestMapping("/complete/{gameStateId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void endGame(@PathVariable String gameStateId) {
+        gameService.complete(gameStateId);
+    }
 }

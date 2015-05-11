@@ -13,6 +13,12 @@ var chooseTopicState = 'choose-topic';
 var questionState = 'question';
 var statisticsState = 'statistics';
 
+var winMsg = 'Вы победили игрока ';
+var looseMsg = 'Вы проиграли игроку ';
+var drawMsg = 'Вы сыграли вничью с игроком ';
+var countMsg = ' со счетом ';
+var countDrawMsg = '. Счет ';
+
 $(document).ready(function() {
 	$loader = $('#loader');
 	$content= $('#content');
@@ -29,6 +35,8 @@ function createGame() {
 		$('#player-name').text(playerName);
 		var gameStatesLength = gameStates.length;
 		
+		showEndGameNotifications(gameStatesLength);
+		
 		var currentPlayingGameStateIndex = hasPlayingGame(gameStatesLength);
 		if (currentPlayingGameStateIndex < 0) {
 			generateCompetitors(gameStatesLength);
@@ -40,6 +48,42 @@ function createGame() {
 		var playingRound = getPlayingRound(currentPlayingGameState);
 		chooseTopic(playingRound.topic.id);
 	});
+}
+
+function showEndGameNotifications(gameStatesLength) {
+	var msg = '';
+	for (var i = 0; i < gameStatesLength; i++) {
+		if (gameStates[i].gameResult !== 'NO_RESULT') {
+			msg += '<p class="text->';
+			if (gameStates[i].gameResult === 'WIN') {
+				msg += 'success">';
+				msg += winMsg;
+			}
+			if (gameStates[i].gameResult === 'LOOSE') {
+				msg += 'danger">';
+				msg += looseMsg;
+			}
+			if (gameStates[i].gameResult === 'DRAW') {
+				msg += 'info">';
+				msg += drawMsg;
+			}
+			msg += gameStates[i].competitorName;
+			if (gameStates[i].gameResult === 'WIN' || gameStates[i].gameResult === 'LOOSE') {
+				msg += countMsg;
+			} else {
+				msg += countDrawMsg;
+			}
+			msg += gameStates[i].points;
+			msg += '-';
+			msg += gameStates[i].competitorPoints;
+			msg += '</p>';
+			$.ajax('/game/complete/' + gameStates[i].id);
+		}
+	}
+	if (msg !== '') {
+		$('#notification').html(msg);
+		$('#modal').modal('show');
+	}
 }
 
 function hasPlayingGame(gameStatesLength) {
@@ -55,7 +99,7 @@ function generateCompetitors(gameStatesLength) {
 	var $players = $('#players');
 	$players.html('');
 	for (var i = 0; i < gameStatesLength; i++) {
-		if (gameStates[i].competitorId != null) {
+		if (gameStates[i].competitorId != null && gameStates[i].gameResult === 'NO_RESULT') {
 			if (gameStates[i].yourTurn) {
 				$players.append('<button type="button" class="btn btn-block btn-lg btn-primary" onclick="play(' + i + ')">' + gameStates[i].competitorName + ' ' + gameStates[i].points + ' - ' + gameStates[i].competitorPoints + '</button>');				
 			} else {
@@ -147,7 +191,7 @@ function chooseTopic(topicId) {
 			
 			$('#current-topic').text(playingRound.topic.name + '. Вопрос №' + (playingRound.questionsCounter + 1));
 			$('#question').text(question.question);
-			for (var i = 0; i < 3; i++) {
+			for (var i = 0; i < 4; i++) {
 				$('#answer' + i).text(question.answers[i]);
 			}
 			$('#next').hide();

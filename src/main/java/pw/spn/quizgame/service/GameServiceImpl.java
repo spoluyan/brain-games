@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pw.spn.quizgame.domain.GameResult;
 import pw.spn.quizgame.domain.GameState;
 import pw.spn.quizgame.domain.PlayedRound;
 import pw.spn.quizgame.domain.Question;
@@ -119,12 +120,38 @@ public class GameServiceImpl implements GameService {
             }
             competitorRound.setCompetitorAnswers(answers);
             competitorGameState.setCompetitorPoints(gameState.getPoints());
+
+            if (gameState.getPlayedRounds().size() == 6 && competitorRound.getAnswers() != null) {
+                // end of game
+                if (gameState.getPoints() > competitorGameState.getPoints()) {
+                    gameState.setGameResult(GameResult.WIN);
+                    competitorGameState.setGameResult(GameResult.LOOSE);
+                }
+
+                if (gameState.getPoints() == competitorGameState.getPoints()) {
+                    gameState.setGameResult(GameResult.DRAW);
+                    competitorGameState.setGameResult(GameResult.DRAW);
+                }
+
+                if (gameState.getPoints() < competitorGameState.getPoints()) {
+                    gameState.setGameResult(GameResult.LOOSE);
+                    competitorGameState.setGameResult(GameResult.WIN);
+                }
+            }
+
             gameStateRepository.save(competitorGameState);
         }
 
         gameStateRepository.save(gameState);
 
         return rightAnswer;
+    }
+
+    @Override
+    public void complete(String gameStateId) {
+        GameState state = getGameStateById(gameStateId);
+        state.setCompleted(true);
+        gameStateRepository.save(state);
     }
 
     private GameState getGameStateById(String gameStateId) {

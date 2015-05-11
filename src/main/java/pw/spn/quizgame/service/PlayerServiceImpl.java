@@ -41,7 +41,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<GameState> getPlayerGameStates() {
-        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedTrue(getCurrentPlayerId());
+        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedFalse(getCurrentPlayerId());
         if (states.size() == 0) {
             GameState state = new GameState();
             state.setPlayerId(getCurrentPlayerId());
@@ -58,13 +58,13 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Map<String, String> getAvailablePlayers() {
-        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedTrue(getCurrentPlayerId());
+        List<GameState> states = gameStateRepository.findByPlayerIdAndCompletedFalse(getCurrentPlayerId());
         Set<String> exclusions = new HashSet<>(states.size() + 1);
         exclusions.add(getCurrentPlayerId());
         states.forEach(state -> {
             exclusions.add(state.getCompetitorId());
         });
-        List<Player> availablePlayers = playerRepository.findByPlayerIdNotIn(exclusions);
+        List<Player> availablePlayers = playerRepository.findByIdNotIn(exclusions);
         Map<String, String> result = new HashMap<>(availablePlayers.size());
         availablePlayers.forEach(player -> {
             result.put(player.getId(), player.getLogin());

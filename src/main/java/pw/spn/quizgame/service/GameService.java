@@ -11,4 +11,6 @@ public interface GameService {
     Question getQuestion(String gameStateId, String topicId);
 
     int answer(String gameStateId, int answer);
+    
+    void complete(String gameStateId);
 }

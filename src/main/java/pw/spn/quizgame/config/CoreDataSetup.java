@@ -49,7 +49,7 @@ public final class CoreDataSetup {
         questionRepository.deleteAll();
         rightAnswerRepository.deleteAll();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             Topic t = topicRepository.save(new Topic("topic" + i));
 
             for (int j = 0; j < 3; j++) {

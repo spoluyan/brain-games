@@ -10,5 +10,5 @@ import pw.spn.quizgame.domain.Player;
 public interface PlayerRepository extends MongoRepository<Player, String> {
     Player findByLoginIgnoreCase(String login);
 
-    List<Player> findByPlayerIdNotIn(Collection<String> playerId);
+    List<Player> findByIdNotIn(Collection<String> id);
 }
