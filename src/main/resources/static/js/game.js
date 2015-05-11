@@ -19,12 +19,22 @@ var drawMsg = 'Вы сыграли вничью с игроком ';
 var countMsg = ' со счетом ';
 var countDrawMsg = '. Счет ';
 
+var pingInterval = 5000;
+
 $(document).ready(function() {
 	$loader = $('#loader');
 	$content= $('#content');
 	showLoader();
 	createGame();
+	setInterval(ping, pingInterval);
 });
+
+function ping() {
+	$.ajax('/game/state').success(function(states) {
+		gameStates = states;
+		generateCompetitors(gameStates.length);
+	});
+}
 
 function createGame() {
 	$.ajax('/game/state').success(function(states) {

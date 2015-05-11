@@ -21,7 +21,7 @@ import pw.spn.quizgame.util.CryptoUtil;
 
 @Component
 @Lazy(false)
-public final class CoreDataSetup {
+public final class DataSetup {
     @Autowired
     private PlayerRepository playerRepository;
 
