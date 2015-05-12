@@ -22,7 +22,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/game/**", "/stat").authenticated().and().authorizeRequests()
-                .antMatchers("/register", "/addUser").permitAll().and().formLogin().defaultSuccessUrl("/game/", true)
+                .antMatchers("/register", "/addUser").permitAll().and().authorizeRequests().antMatchers("/admin/**")
+                .hasIpAddress("127.0.0.1").and().formLogin().defaultSuccessUrl("/game/", true)
                 .loginPage("/").permitAll().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").permitAll();
     }
